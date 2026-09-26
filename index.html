@@ -26,17 +26,17 @@
  canvas.addEventListener('contextmenu',e=>e.preventDefault());
  canvas.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
  const config={
-  dataUrl:'Build/publish-web.data.unityweb',
-  frameworkUrl:'Build/publish-web.framework.js.unityweb',
-  codeUrl:'Build/publish-web.wasm.unityweb',
+  dataUrl:'Build/publish-web.data.unityweb?v=20260926104303',
+  frameworkUrl:'Build/publish-web.framework.js.unityweb?v=20260926104303',
+  codeUrl:'Build/publish-web.wasm.unityweb?v=20260926104303',
   streamingAssetsUrl:'StreamingAssets',
   companyName:"to4ura",
   productName:"ねこスマートボール",
-  productVersion:"1.0",
+  productVersion:"1.1",
   devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),
   showBanner:(message,type)=>{if(type==='error')fail(message);else console.warn(message);}
  };
- const loader=document.createElement('script');loader.src='Build/publish-web.loader.js';
+ const loader=document.createElement('script');loader.src='Build/publish-web.loader.js?v=20260926104303';
  loader.onerror=()=>fail('Loader download failed');
  loader.onload=()=>createUnityInstance(canvas,config,p=>{document.getElementById('progress').value=p;document.getElementById('status').textContent='読み込み中 '+Math.round(p*100)+'%';}).then(instance=>{if(!failed)loading.style.display='none';window.smartball=instance;canvas.focus();}).catch(fail);
  document.body.appendChild(loader);
