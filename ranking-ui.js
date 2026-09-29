@@ -58,7 +58,7 @@
  function close(){
   if(busy)return;overlay.hidden=true;request++;$('cat-pin').value='';
   if(window.smartball&&target)window.smartball.SendMessage(target,'CloseRanking','');
-  document.getElementById('game')?.focus();
+  document.getElementById('game')?.focus();window.dispatchEvent(new Event('cat-ranking-closed'));
  }
  overlay.querySelector('.cat-close').onclick=close;
  overlay.addEventListener('keydown',e=>{
