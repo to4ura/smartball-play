@@ -2,6 +2,7 @@
  'use strict';
  const screen=document.createElement('section');screen.id='cat-modes';screen.hidden=true;screen.innerHTML='<div class="mode-card" role="dialog" aria-modal="true" aria-label="ゲームモード"></div>';document.body.appendChild(screen);
  const card=screen.firstElementChild,network=document.createElement('div');network.id='duel-network';network.setAttribute('role','status');document.body.appendChild(network);
+ let resultData=null,lastGame='solo';
  let target=null,ready=false,current='title',busy=false,showingRanking=false,saved=null;
  try{saved=JSON.parse(localStorage.getItem('CatSmartball.Room.v3'));}catch{}
  const config=window.CAT_RANKING_CONFIG;
@@ -23,21 +24,25 @@
  const rules='<p class="mode-rules"><b class="mode-blue">1P：青</b>　<b class="mode-red">2P：赤</b><br>1発ずつ交代し、各13発で勝負！<br>16穴が先に埋まった場合も終了。<br>穴数ボーナスは各自の入球数で計算。</p>';
  const button=(label,action,cls='')=>'<button data-action="'+action+'" class="'+cls+'">'+label+'</button>';
  function render(which){
-  current=which;screen.hidden=false;
+  current=which;screen.hidden=false;card.dataset.screen=which;
   let html='';
-  if(which==='title')html='<p>ころん、と入れて。そろえて、競おう。</p><h1>ねこ<br>スマートボール</h1>'+cats+button('一人であそぶ','solo','primary')+button('対戦する','versus')+(saved?button('前の対戦に戻る','resume','small'):'')+button('ランキング','ranking','small');
-  if(which==='versus')html='<h2>だれと対戦する？</h2>'+duelCats+button('VS CPU','cpu','primary')+button('VS 近くの人','near')+button('VS オンライン','match')+rules+button('戻る','title','small');
+  if(which==='title')html='<img class="mode-hero" src="pop-art/title-hero.png" alt="ねこスマートボール">'+button('ひとりで遊ぶ','solo','primary')+button('対戦する','versus')+(saved?button('前の対戦に戻る','resume','small'):'')+button('ランキング','ranking','small');
+  if(which==='versus')html='<img class="mode-versus-hero" src="pop-art/versus-header.png" alt="対戦する">'+button('CPUと対戦','cpu','primary')+button('合言葉で対戦','near')+button('オンライン対戦','match')+rules+button('戻る','title','small');
   if(which==='near')html='<h2>近くの人と対戦</h2><p>それぞれのスマホでこのゲームを開いてね。</p>'+button('部屋をつくる','create','primary')+'<p>相手から教わった合言葉を入力</p><input aria-label="合言葉（数字6桁）" id="duel-code" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="数字6桁">'+button('部屋に入る','join')+button('戻る','versus','small');
   if(which==='lobby')html='<h2>対戦相手を待っています</h2><p class="mode-code"></p><p>近くの人には、この合言葉を伝えてね。<br>オンラインは参加者同士で自動的につながります。</p>'+button('キャンセル','leave','small');
   if(which==='pause-menu'||which==='online-menu')html='<h2>対戦・ゲームメニュー</h2>'+button('ゲームに戻る','continue','primary')+button('ゲームを終了してタイトルへ','leave')+(which==='online-menu'?'<p>退出すると、この対戦は終了します。</p>':'');
   if(which==='ended')html='<h2>対戦が終了しました</h2><p>相手が退出したか、接続が長く途切れました。</p>'+button('タイトルへ','leave','primary');
-  card.innerHTML=html+'<p class="mode-message" role="status"></p>';card.querySelector('button')?.focus();
+  const approved=window.renderApprovedMode?.(which,resultData);card.className=approved?'mode-root':'mode-card';
+  card.innerHTML=approved||(html+'<p class="mode-message" role="status"></p>');
  }
  function message(text){const el=card.querySelector('.mode-message');if(el)el.textContent=text;}
  async function act(action){
   if(busy)return;if(!ready){message('ゲームの準備中です。少し待ってね。');return;}
-  if(['title','versus','near'].includes(action)){render(action);return;}
-  if(action==='solo'||action==='cpu'){screen.hidden=true;current='playing';send(action==='solo'?'StartSolo':'StartCpu');return;}
+  if(['title','versus','near','help','settings'].includes(action)){render(action);return;}
+  if(action==='save-settings'){render('title');return;}
+  if(action==='copy-code'){const code=card.querySelector('.mode-code')?.textContent;if(code)navigator.clipboard.writeText(code).catch(()=>message('合言葉を選択してコピーしてね'));return;}
+  if(action==='replay'){if(resultData?.online){render('versus');return;}action=lastGame;}
+  if(action==='solo'||action==='cpu'){lastGame=action;resultData=null;screen.hidden=true;current='playing';send(action==='solo'?'StartSolo':'StartCpu');return;}
   if(action==='continue'){screen.hidden=true;current='playing';send('ResumePlay');return;}
   if(action==='ranking'){showingRanking=true;screen.hidden=true;send('OpenRanking');return;}
   busy=true;card.querySelectorAll('button').forEach(b=>b.disabled=true);
@@ -49,8 +54,9 @@
   }catch(e){message(e.message==='code'?'合言葉は数字6桁で入力してね。':error(e));}
   finally{busy=false;card.querySelectorAll('button').forEach(b=>b.disabled=false);}
  }
- card.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b)act(b.dataset.action);});
+ card.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;if(b.dataset.action==='toggle-setting'){const on=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',String(on));b.src=b.src.replace(/toggle-(on|off)/,'toggle-'+(on?'on':'off'));localStorage.setItem('Smartball.'+b.dataset.setting,on?'on':'off');return;}act(b.dataset.action);});
+ card.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[role=button],[role=switch]')){e.preventDefault();e.target.click();}});
  screen.addEventListener('keydown',e=>{if(e.key==='Tab'){const list=[...card.querySelectorAll('button,input')].filter(x=>!x.disabled),first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
- window.CatModes={open(name,which){target=name;if(ready)render(which);},ready(){ready=true;render('title');},action(kind,value,turn){client.action(kind,value,turn);},played(){client.played();},outcome(json){client.outcome(JSON.parse(json));}};
- window.addEventListener('cat-ranking-closed',()=>{if(showingRanking){showingRanking=false;render('title');}});
+ window.CatModes={result(name,data){target=name;resultData=data;render(data.duel?(data.winner<0?'draw':'win'):'solo-result');},open(name,which){target=name;if(ready)render(which);},ready(){ready=true;render('title');},action(kind,value,turn){client.action(kind,value,turn);},played(){client.played();},outcome(json){client.outcome(JSON.parse(json));}};
+ window.addEventListener('cat-ranking-closed',()=>{if(showingRanking){showingRanking=false;render(resultData?(resultData.duel?(resultData.winner<0?'draw':'win'):'solo-result'):'title');}});
 })();

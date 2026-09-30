@@ -16,6 +16,8 @@
  h1{font-size:24px;margin:0 0 20px}p{font-size:14px;line-height:1.8}progress{width:240px;max-width:80vw;accent-color:#c18a4a;height:12px;margin:auto}
  #error{display:none;max-width:420px}button{border:1px solid #c18a4a;background:#fff;border-radius:14px;padding:12px 24px;color:#64452e;font:inherit}
  </style>
+ <link rel="stylesheet" href="pop-theme.css?v=1">
+ <link rel="stylesheet" href="approved-ui.css?v=1">
 </head>
 <body>
  <main id="stage"><canvas id="game" tabindex="0" aria-label="ねこスマートボール。右のレバーを下に引いて離すと発射。左右スワイプで穴を回転。"></canvas></main>
@@ -24,7 +26,9 @@
  <script src="ranking-store.js?v=1"></script>
  <script src="ranking-ui.js?v=2"></script>
  <script src="duel-client.js?v=2"></script>
- <script src="modes-ui.js?v=3"></script>
+ <script src="approved-ui-templates.js?v=1"></script>
+ <script src="approved-ui.js?v=1"></script>
+ <script src="modes-ui.js?v=4"></script>
  <script>
  const canvas=document.getElementById('game');
  const loading=document.getElementById('loading');
@@ -33,9 +37,9 @@
  canvas.addEventListener('contextmenu',e=>e.preventDefault());
  canvas.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
  const config={
-  dataUrl:'Build/publish-web.data.unityweb?v=20260930033004',
-  frameworkUrl:'Build/publish-web.framework.js.unityweb?v=20260930033004',
-  codeUrl:'Build/publish-web.wasm.unityweb?v=20260930033004',
+  dataUrl:'Build/Web.data.unityweb?v=20260930191719',
+  frameworkUrl:'Build/Web.framework.js.unityweb?v=20260930191719',
+  codeUrl:'Build/Web.wasm.unityweb?v=20260930191719',
   streamingAssetsUrl:'StreamingAssets',
   companyName:"to4ura",
   productName:"ねこスマートボール",
@@ -43,7 +47,7 @@
   devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),
   showBanner:(message,type)=>{if(type==='error')fail(message);else console.warn(message);}
  };
- const loader=document.createElement('script');loader.src='Build/publish-web.loader.js?v=20260930033004';
+ const loader=document.createElement('script');loader.src='Build/Web.loader.js?v=20260930191719';
  loader.onerror=()=>fail('Loader download failed');
  loader.onload=()=>createUnityInstance(canvas,config,p=>{document.getElementById('progress').value=p;document.getElementById('status').textContent='読み込み中 '+Math.round(p*100)+'%';}).then(instance=>{if(!failed)loading.style.display='none';window.smartball=instance;canvas.focus();window.CatModes.ready();}).catch(fail);
  document.body.appendChild(loader);
