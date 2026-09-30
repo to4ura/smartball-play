@@ -24,7 +24,7 @@
  <script src="ranking-store.js?v=1"></script>
  <script src="ranking-ui.js?v=2"></script>
  <script src="duel-client.js?v=2"></script>
- <script src="modes-ui.js?v=2"></script>
+ <script src="modes-ui.js?v=3"></script>
  <script>
  const canvas=document.getElementById('game');
  const loading=document.getElementById('loading');
@@ -33,17 +33,17 @@
  canvas.addEventListener('contextmenu',e=>e.preventDefault());
  canvas.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
  const config={
-  dataUrl:'Build/publish-web.data.unityweb?v=20260929145405',
-  frameworkUrl:'Build/publish-web.framework.js.unityweb?v=20260929145405',
-  codeUrl:'Build/publish-web.wasm.unityweb?v=20260929145405',
+  dataUrl:'Build/publish-web.data.unityweb?v=20260930033004',
+  frameworkUrl:'Build/publish-web.framework.js.unityweb?v=20260930033004',
+  codeUrl:'Build/publish-web.wasm.unityweb?v=20260930033004',
   streamingAssetsUrl:'StreamingAssets',
   companyName:"to4ura",
   productName:"ねこスマートボール",
-  productVersion:"1.17",
+  productVersion:"1.18",
   devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),
   showBanner:(message,type)=>{if(type==='error')fail(message);else console.warn(message);}
  };
- const loader=document.createElement('script');loader.src='Build/publish-web.loader.js?v=20260929145405';
+ const loader=document.createElement('script');loader.src='Build/publish-web.loader.js?v=20260930033004';
  loader.onerror=()=>fail('Loader download failed');
  loader.onload=()=>createUnityInstance(canvas,config,p=>{document.getElementById('progress').value=p;document.getElementById('status').textContent='読み込み中 '+Math.round(p*100)+'%';}).then(instance=>{if(!failed)loading.style.display='none';window.smartball=instance;canvas.focus();window.CatModes.ready();}).catch(fail);
  document.body.appendChild(loader);
