@@ -28,3 +28,26 @@ html,body{background:#29a7ec;color:#084896}
 #cat-board .cat-actions{order:2}#cat-profile{width:100%;height:60px;border:0;box-shadow:none;background:url('approved-assets/PopArtV01/buttons/white-normal.png') center/100% 100%;color:#084896;font-family:inherit}
 .cat-row{min-height:40px;border-bottom:1px solid #daecf7}.cat-row[data-own=true]{background:transparent}.cat-name,.cat-score{font-size:15px;color:#084896}.cat-rank{color:#084896}
 #cat-message:empty{display:none}#cat-register{border:20px solid transparent;border-image:url('approved-assets/PopArtV01/panels/modal.png') 38 fill/20px}
+
+/* Navigation and player-relative results. */
+#cat-modes .screen-title{display:none!important}
+#cat-modes .page-back{margin-top:16px;flex-shrink:0}
+#cat-modes .duel-result{width:100%;text-align:center;padding:24px 6px}
+#cat-modes .duel-result h1{font-size:64px;line-height:1.2;margin:14px 0;color:inherit;-webkit-text-stroke:2px white;text-shadow:0 4px #064880}
+#cat-modes .result-cats{display:flex;justify-content:center;gap:20px;margin:20px 0}
+#cat-modes .result-cats img{width:110px;height:110px;object-fit:contain}
+#cat-modes .duel-result .panel{margin:22px 0;padding:24px}
+#cat-modes .duel-result .gamebutton{width:100%;margin-top:14px;min-height:60px}
+#cat-modes .team-red{color:#dd4254}#cat-modes .team-blue{color:#0966b7}
+#cat-modes .team-red .ribbon{background:#dd4254;color:white}
+#cat-modes .duel-result .row{display:flex;justify-content:space-between;font-size:24px}
+#cat-ranking .cat-card>header{display:none}
+#cat-ranking .ranking-home{margin-top:14px;min-height:54px;flex-shrink:0;background:url('approved-assets/PopArtV01/buttons/white-normal.png') center/100% 100%;border:0;color:#084896;font:inherit}
+#cat-register .cat-form small{display:block}
+#cat-register .account-delete{color:#bb273d;margin-top:16px}
+
+#cat-modes .duel-result .panel{color:#084896}#cat-modes .duel-result .row b{color:#084896}
+
+#cat-register .cat-submit{height:58px;background:url(approved-assets/PopArtV01/buttons/yellow-normal.png) center/100% 100%;border:0;color:#084896;box-shadow:none}
+
+#cat-modes .duel-result .row:nth-child(2) b{color:#dd4254}

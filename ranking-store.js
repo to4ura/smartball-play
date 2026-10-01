@@ -45,6 +45,21 @@
     const data=await rpc('smartball_account',{p_name:name,p_pin:pin,p_action:action,p_avatar:avatar});
     profile={...data,pin};write(PROFILE,profile);return profile;
    },
+   async edit(name,avatar){
+    if(!profile)throw Error('login_failed');
+    name=name.trim();if(!name||Array.from(name).length>8||/[\x00-\x1f\x7f]/.test(name))throw Error('invalid_name');
+    await sync();const owner={...profile};
+    const data=await rpc('smartball_profile',{p_name:owner.name,p_pin:owner.pin,p_action:'update',p_new_name:name,p_avatar:avatar});
+    const oldKey=config.season+':'+owner.name,newKey=config.season+':'+name;
+    if(oldKey!==newKey&&pending[oldKey]){pending[newKey]=Math.max(pending[newKey]||0,pending[oldKey]);delete pending[oldKey];write(PENDING,pending);}
+    profile={...data,pin:owner.pin};write(PROFILE,profile);return profile;
+   },
+   async remove(){
+    if(!profile)throw Error('login_failed');
+    if(inflight)await inflight;
+    const owner={...profile};await rpc('smartball_profile',{p_name:owner.name,p_pin:owner.pin,p_action:'delete'});
+    delete pending[config.season+':'+owner.name];write(PENDING,pending);profile=null;write(PROFILE,null);
+   },
    logout(){profile=null;write(PROFILE,null);},queue,sync,
    leaderboard(){return rpc('smartball_leaderboard',{p_name:profile?.name||null,p_season:config.season});}
   };

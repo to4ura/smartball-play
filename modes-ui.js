@@ -2,7 +2,7 @@
  'use strict';
  const screen=document.createElement('section');screen.id='cat-modes';screen.hidden=true;screen.innerHTML='<div class="mode-card" role="dialog" aria-modal="true" aria-label="ゲームモード"></div>';document.body.appendChild(screen);
  const card=screen.firstElementChild,network=document.createElement('div');network.id='duel-network';network.setAttribute('role','status');document.body.appendChild(network);
- let resultData=null,lastGame='solo';
+ let resultData=null,lastGame='solo',settingsParent='title';
  let target=null,ready=false,current='title',busy=false,showingRanking=false,saved=null;
  try{saved=JSON.parse(localStorage.getItem('CatSmartball.Room.v3'));}catch{}
  const config=window.CAT_RANKING_CONFIG;
@@ -38,8 +38,9 @@
  function message(text){const el=card.querySelector('.mode-message');if(el)el.textContent=text;}
  async function act(action){
   if(busy)return;if(!ready){message('ゲームの準備中です。少し待ってね。');return;}
-  if(['title','versus','near','help','settings'].includes(action)){render(action);return;}
-  if(action==='save-settings'){render('title');return;}
+  if(action==='settings')settingsParent=current;
+  if(['title','versus','near','help','settings'].includes(action)){if(action==='title')resultData=null;render(action);return;}
+  if(action==='save-settings'||action==='back-settings'){render(settingsParent);return;}
   if(action==='copy-code'){const code=card.querySelector('.mode-code')?.textContent;if(code)navigator.clipboard.writeText(code).catch(()=>message('合言葉を選択してコピーしてね'));return;}
   if(action==='replay'){if(resultData?.online){render('versus');return;}action=lastGame;}
   if(action==='solo'||action==='cpu'){lastGame=action;resultData=null;screen.hidden=true;current='playing';send(action==='solo'?'StartSolo':'StartCpu');return;}
@@ -47,7 +48,7 @@
   if(action==='ranking'){showingRanking=true;screen.hidden=true;send('OpenRanking');return;}
   busy=true;card.querySelectorAll('button').forEach(b=>b.disabled=true);
   try{
-   if(action==='leave'){await client.leave();network.textContent='';send('ShowTitle');render('title');}
+   if(action==='leave'){await client.leave();resultData=null;network.textContent='';send('ShowTitle');render('title');}
    else if(action==='resume'){if(saved)await client.start('read',saved.token,saved.code);}
    else if(action==='join'){const code=card.querySelector('#duel-code').value.trim();if(!/^\d{6}$/.test(code))throw Error('code');await client.start('join',token(),code);}
    else if(action==='create'||action==='match')await client.start(action,token());
@@ -57,6 +58,6 @@
  card.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;if(b.dataset.action==='toggle-setting'){const on=b.getAttribute('aria-checked')!=='true';b.setAttribute('aria-checked',String(on));b.src=b.src.replace(/toggle-(on|off)/,'toggle-'+(on?'on':'off'));localStorage.setItem('Smartball.'+b.dataset.setting,on?'on':'off');return;}act(b.dataset.action);});
  card.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[role=button],[role=switch]')){e.preventDefault();e.target.click();}});
  screen.addEventListener('keydown',e=>{if(e.key==='Tab'){const list=[...card.querySelectorAll('button,input')].filter(x=>!x.disabled),first=list[0],last=list.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
- window.CatModes={result(name,data){target=name;resultData=data;render(data.duel?(data.winner<0?'draw':'win'):'solo-result');},open(name,which){target=name;if(ready)render(which);},ready(){ready=true;render('title');},action(kind,value,turn){client.action(kind,value,turn);},played(){client.played();},outcome(json){client.outcome(JSON.parse(json));}};
- window.addEventListener('cat-ranking-closed',()=>{if(showingRanking){showingRanking=false;render(resultData?(resultData.duel?(resultData.winner<0?'draw':'win'):'solo-result'):'title');}});
+ window.CatModes={result(name,data){target=name;resultData=data;render(data.duel?(data.winner<0?'draw':data.winner===(data.seat??0)?'win':'lose'):'solo-result');},open(name,which){target=name;if(ready)render(which);},ready(){ready=true;render('title');},action(kind,value,turn){client.action(kind,value,turn);},played(){client.played();},outcome(json){client.outcome(JSON.parse(json));}};
+ window.addEventListener('cat-ranking-closed',()=>{showingRanking=false;resultData=null;send('ShowTitle');render('title');});
 })();
