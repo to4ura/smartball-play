@@ -26,8 +26,16 @@
   if(backAction){
    const temp=document.createElement('div');temp.innerHTML=APPROVED_SCREENS.versus;
    const back=temp.querySelector('button').cloneNode(true);back.dataset.action=backAction;back.textContent='もどる';back.classList.add('page-back');
-   screen.querySelector('.body').append(back);
+   const existing=[...screen.querySelectorAll('button')].find(b=>/もどる|戻る|タイトルへ/.test(b.textContent));
+   if(existing)existing.replaceWith(back);else screen.querySelector('.body').append(back);
   }
+  const backTemplate=document.createElement('div');backTemplate.innerHTML=APPROVED_SCREENS.versus;
+  screen.querySelectorAll('button').forEach(button=>{
+   if(!/もどる|戻る|タイトルへ/.test(button.textContent)||button.dataset.action==='continue')return;
+   const replacement=backTemplate.querySelector('button').cloneNode(true);
+   replacement.dataset.action=button.dataset.action;replacement.classList.add('page-back');
+   button.replaceWith(replacement);
+  });
   if(which==='settings')screen.querySelectorAll('.toggle').forEach((t,i)=>{t.dataset.action='toggle-setting';t.dataset.setting=['bgm','sound','reduced'][i];t.tabIndex=0;t.setAttribute('role','switch');const on=localStorage.getItem('Smartball.'+t.dataset.setting)!=='off';t.setAttribute('aria-checked',String(on));t.src=t.src.replace(/toggle-(on|off)/,'toggle-'+(on?'on':'off'));});
   const status=document.createElement('p');status.className='mode-message';status.setAttribute('role','status');screen.querySelector('.body').append(status);
   return wrapper.innerHTML;

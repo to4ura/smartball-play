@@ -6,3 +6,6 @@
 #cat-modes[hidden]{display:none}#cat-modes>.mode-root{display:contents}#cat-modes .screen{height:100dvh;width:min(100vw,430px);max-width:430px;margin:0;border:0;border-radius:0;box-shadow:none;aspect-ratio:auto;overflow:auto;flex-shrink:0}
 #cat-modes .body{flex-shrink:0}#cat-modes .mode-card{max-height:none}#cat-modes button{margin:0;font-family:inherit;letter-spacing:normal;box-shadow:none;border-radius:0}
 #cat-modes .mode-message{font-size:12px;min-height:0;margin:0;text-align:center}#cat-modes [data-action]{cursor:pointer}#cat-modes .mode-card[data-action]{display:grid;width:auto;max-height:none;overflow:visible;text-align:left}
+
+#cat-modes .page-back,#cat-ranking .unified-back{width:100%;height:60px;min-height:60px;flex-shrink:0;box-sizing:border-box;padding:13px 17px;display:flex;align-items:center;justify-content:space-between;gap:7px;font:900 17px PopRound,PopRounded,Meiryo,sans-serif;color:#084896;border:0;border-radius:0;box-shadow:none;background:url(approved-assets/PopArtV01/buttons/white-normal.png) center/100% 100% no-repeat;filter:drop-shadow(0 3px 0 #094f9138)}
+#cat-ranking .unified-back img{width:24px;height:24px;object-fit:contain}#cat-ranking .unified-back span{-webkit-text-stroke:3px #fff;paint-order:stroke fill}
