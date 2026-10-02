@@ -69,3 +69,6 @@ html,body{background:#29a7ec;color:#084896}
 
 /* Below the score plaques: same camera scale as the Unity HUD. */
 #duel-menu-button{top:calc(50dvh - min(39.6875dvh,69.78022vw) + 6px)}
+
+/* Match the solo HUD button material, proportions and opaque symbol. */
+#duel-menu-button{width:min(6.375dvh,11.20879vw);height:min(7.625dvh,13.40659vw);padding:0;background:url(pop-art/hud-pause.png) center/100% 100% no-repeat;color:#084896;font-family:PopRounded,Meiryo,sans-serif;font-size:min(2.625dvh,4.61538vw)}
