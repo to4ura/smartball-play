@@ -52,4 +52,12 @@ html,body{background:#29a7ec;color:#084896}
 
 #cat-modes .duel-result .row:nth-child(2) b{color:#dd4254}
 
-#cat-modes .page-back,#cat-ranking .ranking-home{width:100%;height:56px;min-height:56px;padding:13px 17px;font-size:17px;color:#084896;border:0;border-radius:0;box-shadow:none;background:url(approved-assets/PopArtV01/buttons/white-normal.png) center/100% 100% no-repeat}
+#duel-menu-button{position:fixed;right:max(12px,calc((100vw - 430px)/2 + 12px));top:88px;width:34px;height:34px;z-index:8;border:2px solid white;border-radius:12px;background:#fff7df;color:#085ba1;font:900 22px sans-serif;box-shadow:0 2px #c7a664}#duel-menu-button[hidden]{display:none}
+#cat-modes .result-v2 .hero-v2{object-fit:contain;min-height:0}
+
+.approved-bonus{position:fixed;top:100px;left:50%;transform:translateX(-50%);width:min(90vw,380px);z-index:9;border-radius:16px;background:#0863ae;color:white;text-align:center;padding:14px;font-family:PopRounded,sans-serif;pointer-events:none}
+
+#loading .loading-hero{width:min(86vw,340px);height:min(54dvh,400px);object-fit:contain;margin:auto}
+#loading .loading-panel{width:min(88vw,360px);padding:22px;border:18px solid transparent;border-image:url(approved-assets/PopArtV01/panels/white.png) 38 fill/18px;margin:12px auto;color:#084896}
+#loading progress{width:100%;accent-color:#219deb}#loading .loading-panel p{margin:0 0 12px}
+#cat-modes:has(.reconnect-view),#cat-modes .screen.reconnect-view{background:transparent}#cat-modes .reconnect-view .body{padding-top:90px}
