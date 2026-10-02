@@ -66,3 +66,6 @@ html,body{background:#29a7ec;color:#084896}
 #cat-ranking .ranking-home{box-shadow:none!important;filter:none;border-radius:0}
 #duel-menu-button{width:44px;height:44px;padding:10px;border:0;border-radius:0;box-shadow:none;background:url(approved-assets/PopArtV01/buttons/white-normal.png) center/100% 100% no-repeat;display:grid;place-items:center;top:92px}
 #duel-menu-button img{width:22px;height:22px;object-fit:contain;pointer-events:none}
+
+/* Below the score plaques: same camera scale as the Unity HUD. */
+#duel-menu-button{top:calc(50dvh - min(39.6875dvh,69.78022vw) + 6px)}
