@@ -3,7 +3,7 @@
  const screen=document.createElement('section');screen.id='cat-modes';screen.hidden=true;screen.innerHTML='<div class="mode-card" role="dialog" aria-modal="true" aria-label="ゲームモード"></div>';document.body.appendChild(screen);
  const card=screen.firstElementChild,network=document.createElement('div');network.id='duel-network';network.setAttribute('role','status');document.body.appendChild(network);
  let resultData=null,lastGame='solo',settingsParent='title',introTimer=null,matchSeat=0,reconnectReturn=null,leaveParent='playing';
- const menuButton=document.createElement('button');menuButton.id='duel-menu-button';menuButton.textContent='≡';menuButton.setAttribute('aria-label','対戦メニュー');menuButton.hidden=true;document.body.append(menuButton);menuButton.onclick=()=>send('RequestGameMenu');
+ const menuButton=document.createElement('button');menuButton.id='duel-menu-button';menuButton.innerHTML='<img src="approved-assets/PopArtV01/icons/pause.png" alt="">' ;menuButton.setAttribute('aria-label','対戦メニュー');menuButton.hidden=true;document.body.append(menuButton);menuButton.onclick=()=>send('RequestGameMenu');
  let target=null,ready=false,current='title',busy=false,showingRanking=false,saved=null;
  try{saved=JSON.parse(localStorage.getItem('CatSmartball.Room.v3'));}catch{}
  const config=window.CAT_RANKING_CONFIG;

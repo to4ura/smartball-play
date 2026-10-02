@@ -10,6 +10,7 @@
    screen.querySelectorAll('.mode-card').forEach((c,i)=>{c.dataset.action=['cpu','near','match'][i];c.tabIndex=0;c.setAttribute('role','button');});
    screen.querySelector('button').dataset.action='title';
   }
+  if(which==='pause-menu')screen.querySelector('h3')?.remove();
   if(which==='near'){const input=screen.querySelector('input');input.id='duel-code';input.value='';input.placeholder='数字6桁';input.inputMode='numeric';input.maxLength=6;}
   if(which==='reconnect'){screen.classList.add('reconnect-view');screen.querySelector('.physical')?.remove();}
   if(which==='lobby'){const code=screen.querySelector('.code');if(code){code.classList.add('mode-code');code.textContent='';}}
