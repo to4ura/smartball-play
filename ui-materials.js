@@ -1,5 +1,5 @@
 (()=>{
- const selector='#cat-modes .gamebutton,#cat-modes .panel,#cat-modes .mode-card,#cat-modes .ribbon,#cat-modes .score-pair>div,#cat-modes .toast,#cat-modes .code,#cat-ranking button,#cat-board .cat-list,#cat-board .cat-own,#cat-register,#loading .loading-panel,#duel-menu-button,.approved-bonus,#duel-network';
+ const selector='#cat-modes .cb-btn,#cat-modes .cb-mode,#cat-modes .cb-scores>div,#cat-modes .gamebutton,#cat-modes .panel,#cat-modes .mode-card,#cat-modes .ribbon,#cat-modes .score-pair>div,#cat-modes .toast,#cat-modes .code,#cat-ranking button,#cat-board .cat-list,#cat-board .cat-own,#cat-register,#loading .loading-panel,#duel-menu-button,.approved-bonus,#duel-network';
  const done=new WeakSet();
  function apply(){document.querySelectorAll(selector).forEach(el=>{
   if(done.has(el)||!el.getClientRects().length)return;
